@@ -7,7 +7,34 @@
 # Q&A
 
 ### Q: On what chains are the smart contracts going to be deployed?
-On any EVM-like ones (Ethereum, Arbitrum, Base, OP Mainnet, BSC, ...)
+Ethereum
+BSC
+Tron
+Base
+Arbitrum
+Hyperliquid L1
+Avalanche
+Polygon
+Berachain
+Unichain
+Sonic
+Cronos
+BSquared
+Bitlayer
+CORE
+OP Mainnet
+Hemi
+Taiko
+Gnosis
+Mantle
+Linea
+Blast
+Celo
+ZKsync Era
+Scroll
+WorldChain
+Swellchain
+Manta
 ___
 
 ### Q: If you are integrating tokens, are you allowing only whitelisted tokens to work with the codebase or any complying with the standard? Are they assumed to have certain properties, e.g. be non-reentrant? Are there any types of [weird tokens](https://github.com/d-xo/weird-erc20) you want to integrate?
@@ -54,7 +81,7 @@ https://docs.symbiotic.fi/
 ___
 
 ### Q: Additional audit information.
--
+As is the default, a high severity issue is worth 5 times the value of a medium severity issue. To encourage placing more of an emphasis on the main scope, vulnerabilities found in the ZK and Network portions have a reduced weight. An issue in the ZK or Network portion will be worth 0.1x weight of a normal medium or high. This means a **Medium** issue in that area is worth a tenth of a Medium in the main scope.
 
 
 # Audit scope
