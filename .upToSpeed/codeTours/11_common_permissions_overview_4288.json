@@ -25,19 +25,6 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nstruct OzOwnableInitParams {\n    address owner;\n}\n```",
-      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzOwnable.sol",
-      "highlight": [
-        {
-          "start": 11,
-          "end": 13
-        }
-      ],
-      "title": "",
-      "id": "50716"
-    },
-    {
-      "type": "highlight",
       "description": "### Step 2: OzAccessControlStorage & SetSelectorRole\n\nThe `OzAccessControlStorage` struct contains a mapping from function selectors to required roles, storing the RBAC configuration on-chain. The `SetSelectorRole` event signals when a selector’s required role is updated, enabling off-chain indexing.\n\nIn `middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol` (lines 14–23):",
       "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol",
       "highlight": [
@@ -48,19 +35,6 @@
       ],
       "title": "",
       "id": "50717"
-    },
-    {
-      "type": "highlight",
-      "description": "```solidity\nstruct OzAccessControlStorage {\n    mapping(bytes4 selector => bytes32 role) _selectorRoles;\n}\n\nevent SetSelectorRole(bytes4 indexed selector, bytes32 indexed role);\n```",
-      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol",
-      "highlight": [
-        {
-          "start": 14,
-          "end": 23
-        }
-      ],
-      "title": "",
-      "id": "50718"
     },
     {
       "type": "highlight",

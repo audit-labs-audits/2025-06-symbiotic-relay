@@ -2,13 +2,14 @@
   "packageName": "symbiotic-relay",
   "packageVersion": 1,
   "hash": "e2391092ebea9ddf3c9b934204ce75476a40bf19",
-  "numberOfTours": 3,
+  "numberOfTours": 4,
   "titleOfTours": [
     "1.1: Common Permissions: Overview",
     "2.1: Base Modules: Overview",
-    "3.1: Validator Set Driver: Overview"
+    "3.1: Validator Set Driver: Overview",
+    "4.1: Want to learn more?"
   ],
-  "totalNumberOfSteps": 42,
+  "totalNumberOfSteps": 41,
   "filesCovered": [
     "middleware-sdk/src/interfaces/modules/common/permissions/IOzOwnable.sol",
     "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol",
