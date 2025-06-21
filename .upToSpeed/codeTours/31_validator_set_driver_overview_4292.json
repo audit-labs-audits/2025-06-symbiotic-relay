@@ -1,0 +1,129 @@
+{
+  "title": "3.1: Validator Set Driver: Overview",
+  "id": "XnqW+6ZiYT3Pv2N+ErMNuM0HzBKAuBPyjHeusdKcCeE=",
+  "originalId": 4292,
+  "position": 8,
+  "steps": [
+    {
+      "type": "textOnly",
+      "description": "This walkthrough introduces five files that compose the Validator Set Driver component and their high-level roles: `EpochManager.sol`, `ValSetDriver.sol`, `ValSetVerifier.sol`, `IEpochManager.sol`, and `IValSetDriver.sol`.",
+      "title": "",
+      "id": "52333"
+    },
+    {
+      "type": "highlight",
+      "description": "The top of `EpochManager.sol` shows `SPDX`, `pragma`, `imports`, and then declares `abstract contract` `EpochManager` (line 11) which implements `IEpochManager` and uses the `Checkpoints` library to track epoch-duration checkpoints. It is responsible for managing epoch boundaries.",
+      "file": "middleware-sdk/src/contracts/modules/valset-driver/EpochManager.sol",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "title": "",
+      "id": "52334"
+    },
+    {
+      "type": "highlight",
+      "description": "`ValSetDriver.sol` begins by importing `EpochManager` and `NetworkManager` (lines 4–5) and then declares `abstract contract ValSetDriver` (line 17). By building on epoch and network contexts and implementing `IValSetDriver`, it derives the validator set for each epoch and exposes membership operations.",
+      "file": "middleware-sdk/src/contracts/modules/valset-driver/ValSetDriver.sol",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 17
+        }
+      ],
+      "title": "",
+      "id": "52335"
+    },
+    {
+      "type": "highlight",
+      "description": "`ValSetVerifier` is a low-level library defining `SSZ` proof structs (`Validator`, `SszProof`), constants for tree heights, and a `SHA-256` proof engine (`processInclusionProofSha256`). It underpins Merkle-proof verification of validator-set updates.",
+      "file": "middleware-sdk/src/contracts/libraries/utils/ValSetVerifier.sol",
+      "highlight": [
+        {
+          "start": 4,
+          "end": 11
+        }
+      ],
+      "title": "",
+      "id": "52336"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "middleware-sdk/src/interfaces/modules/valset-driver/IEpochManager.sol"
+      ],
+      "description": "`IEpochManager` defines the public API for epoch queries: `getCurrentEpoch`, `getCurrentEpochDuration`, `getCurrentEpochStart`, `getNextEpoch`, `getNextEpochDuration`, `getNextEpochStart`, plus historical lookup functions `getEpochIndex`, `getEpochDuration`, `getEpochStart`, and the setter `setEpochDuration`.",
+      "title": "",
+      "id": "52337"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "middleware-sdk/src/interfaces/modules/valset-driver/IValSetDriver.sol"
+      ],
+      "description": "IValSetDriver specifies membership queries (`isVotingPowerProviderRegisteredAt`, `getVotingPowerProvidersAt`, `getKeysProviderAt`, `getReplicasAt`, `getVerificationTypeAt`, `getMaxVotingPowerAt`, `getMinInclusionVotingPowerAt`, `getMaxValidatorsCountAt`, `getRequiredKeyTagsAt`, `isQuorumThresholdRegisteredAt`, `getConfigAt`) and update operations (`add`/`remove` voting providers, `set` keys provider, `add`/`remove` replicas, `set` verification type, `set` min/max voting power, `set` max validators count, `set` key tags, `add`/`remove` quorum thresholds), all guarded by permissions.",
+      "title": "",
+      "id": "52338"
+    },
+    {
+      "type": "highlight",
+      "description": "`getCurrentEpoch()` (lines 38–42) computes the active epoch index by loading the latest duration checkpoint and dividing the elapsed time since the checkpointed start by the duration.",
+      "file": "middleware-sdk/src/contracts/modules/valset-driver/EpochManager.sol",
+      "highlight": [
+        {
+          "start": 38,
+          "end": 42
+        }
+      ],
+      "title": "",
+      "id": "52339"
+    },
+    {
+      "type": "highlight",
+      "description": "`getCurrentEpochStart()` (lines 54–58) returns the timestamp when the current epoch began by adding the number of completed epochs times the duration to the checkpointed start timestamp.",
+      "file": "middleware-sdk/src/contracts/modules/valset-driver/EpochManager.sol",
+      "highlight": [
+        {
+          "start": 54,
+          "end": 58
+        }
+      ],
+      "title": "",
+      "id": "52340"
+    },
+    {
+      "type": "highlight",
+      "description": "`getConfig()` (lines 336–340) fetches the full validator-set configuration in one call—providers, keys provider, replicas, verification type, voting-power bounds, validator-count limit, required key tags, and quorum thresholds—for the current epoch.",
+      "file": "middleware-sdk/src/contracts/modules/valset-driver/ValSetDriver.sol",
+      "highlight": [
+        {
+          "start": 336,
+          "end": 340
+        }
+      ],
+      "title": "",
+      "id": "52341"
+    },
+    {
+      "type": "highlight",
+      "description": "`addVotingPowerProvider()` (lines 354–358) checkpoints a new voting-power provider at the current timestamp and emits `AddVotingPowerProvider`. A permission check enforces that only authorized callers can update the validator set.",
+      "file": "middleware-sdk/src/contracts/modules/valset-driver/ValSetDriver.sol",
+      "highlight": [
+        {
+          "start": 354,
+          "end": 358
+        }
+      ],
+      "title": "",
+      "id": "52342"
+    },
+    {
+      "type": "textOnly",
+      "description": "You have now seen how `EpochManager` governs epoch boundaries, how `ValSetDriver` builds and exposes per-epoch validator-set operations, how `ValSetVerifier` confirms changes by `Merkle` proofs, and which interfaces clients use to query and mutate the validator set.",
+      "title": "",
+      "id": "52343"
+    }
+  ]
+}

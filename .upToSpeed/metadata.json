@@ -1,0 +1,32 @@
+{
+  "packageName": "symbiotic-relay",
+  "packageVersion": 1,
+  "hash": "e2391092ebea9ddf3c9b934204ce75476a40bf19",
+  "numberOfTours": 3,
+  "titleOfTours": [
+    "1.1: Common Permissions: Overview",
+    "2.1: Base Modules: Overview",
+    "3.1: Validator Set Driver: Overview"
+  ],
+  "totalNumberOfSteps": 42,
+  "filesCovered": [
+    "middleware-sdk/src/interfaces/modules/common/permissions/IOzOwnable.sol",
+    "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol",
+    "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessManaged.sol",
+    "middleware-sdk/src/contracts/modules/common/permissions/OzOwnable.sol",
+    "middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol",
+    "middleware-sdk/src/contracts/modules/common/permissions/OzAccessManaged.sol",
+    "middleware-sdk/src/contracts/modules/base/NetworkManager.sol",
+    "middleware-sdk/src/interfaces/modules/base/INetworkManager.sol",
+    "middleware-sdk/src/contracts/modules/base/PermissionManager.sol",
+    "middleware-sdk/src/contracts/modules/base/OzEIP712.sol",
+    "middleware-sdk/src/interfaces/modules/base/IOzEIP712.sol",
+    "middleware-sdk/src/interfaces/modules/base/IPermissionManager.sol",
+    "middleware-sdk/src/contracts/modules/valset-driver/EpochManager.sol",
+    "middleware-sdk/src/contracts/modules/valset-driver/ValSetDriver.sol",
+    "middleware-sdk/src/contracts/libraries/utils/ValSetVerifier.sol",
+    "middleware-sdk/src/interfaces/modules/valset-driver/IEpochManager.sol",
+    "middleware-sdk/src/interfaces/modules/valset-driver/IValSetDriver.sol"
+  ],
+  "numberOfFilesCovered": 17
+}

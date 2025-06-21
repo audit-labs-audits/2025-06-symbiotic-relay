@@ -1,0 +1,150 @@
+{
+  "title": "2.1: Base Modules: Overview",
+  "id": "V3NMqSlAlmTrQQsqPrn/3cae2QpEanPinyP7FqTGTd4=",
+  "originalId": 4295,
+  "position": 4,
+  "steps": [
+    {
+      "type": "textOnly",
+      "description": "Each **base contract** implements a **core primitive** and plugs into the **module registry** via a **matching interface**.",
+      "title": "",
+      "id": "52344"
+    },
+    {
+      "type": "highlight",
+      "description": "```plaintext\nsrc/contracts/modules/base/\n├── NetworkManager.sol    - manages current network and subnetwork IDs via unstructured storage\n├── PermissionManager.sol - defines a reusable permission-checking modifier\n└── OzEIP712.sol          - initializes EIP-712 domain and provides typing utilities\n```",
+      "file": "middleware-sdk/src/contracts/modules/base/NetworkManager.sol",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 1
+        }
+      ],
+      "title": "",
+      "id": "52346"
+    },
+    {
+      "type": "highlight",
+      "description": "```plaintext\nsrc/interfaces/modules/base/\n├── INetworkManager.sol   - external API for network context and subnetwork lookup\n├── IPermissionManager.sol- marker interface for permission logic\n└── IOzEIP712.sol         - EIP-712 hashing API and init parameters\n```",
+      "file": "middleware-sdk/src/interfaces/modules/base/INetworkManager.sol",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 1
+        }
+      ],
+      "title": "",
+      "id": "52348"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nbytes32 private constant NetworkManagerLocation = 0x779150488f5e984d1f840ba606e388ada6c73b44f261274c3595c61a30023e00;\n\nfunction __NetworkManager_init(NetworkManagerInitParams memory initParams) internal virtual onlyInitializing {\n    if (initParams.network == address(0)) revert NetworkManager_InvalidNetwork();\n    INetworkManager.NetworkManagerStorage storage $ = _getNetworkManagerStorage();\n    $. _network      = initParams.network;\n    $. _subnetworkID = initParams.subnetworkID;\n    emit INetworkManager.InitSubnetwork(initParams.network, initParams.subnetworkID);\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/base/NetworkManager.sol",
+      "highlight": [
+        {
+          "start": 14,
+          "end": 33
+        }
+      ],
+      "title": "",
+      "id": "52353"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nfunction NETWORK() public view virtual returns (address) {\n    return _getNetworkManagerStorage()._network;\n}\n\nfunction SUBNETWORK_IDENTIFIER() public view virtual returns (uint96) {\n    return _getNetworkManagerStorage()._subnetworkID;\n}\n\nfunction SUBNETWORK() public view virtual returns (bytes32) {\n    return NETWORK().subnetwork(SUBNETWORK_IDENTIFIER());\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/base/NetworkManager.sol",
+      "highlight": [
+        {
+          "start": 38,
+          "end": 54
+        }
+      ],
+      "title": "",
+      "id": "52351"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nmodifier checkPermission() {\n    _checkPermission();\n    _;\n}\n\nfunction _checkPermission() internal virtual;\n```",
+      "file": "middleware-sdk/src/contracts/modules/base/PermissionManager.sol",
+      "highlight": [
+        {
+          "start": 9,
+          "end": 14
+        }
+      ],
+      "title": "",
+      "id": "52358"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nfunction __OzEIP712_init(OzEIP712InitParams memory initParams) internal virtual onlyInitializing {\n    __EIP712_init(initParams.name, initParams.version);\n    emit InitEIP712(initParams.name, initParams.version);\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/base/OzEIP712.sol",
+      "highlight": [
+        {
+          "start": 14,
+          "end": 19
+        }
+      ],
+      "title": "",
+      "id": "52354"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nfunction hashTypedDataV4(bytes32 structHash) public view returns (bytes32) {\n    return _hashTypedDataV4(structHash);\n}\n\nfunction hashTypedDataV4CrossChain(bytes32 structHash) public view virtual returns (bytes32) {\n    return MessageHashUtils.toTypedDataHash(\n        keccak256(abi.encode(CROSS_CHAIN_TYPE_HASH, _EIP712NameHash(), _EIP712VersionHash())),\n        structHash\n    );\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/base/OzEIP712.sol",
+      "highlight": [
+        {
+          "start": 24,
+          "end": 39
+        }
+      ],
+      "title": "",
+      "id": "52356"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nfunction NETWORK() external view returns (address);\nfunction SUBNETWORK_IDENTIFIER() external view returns (uint96);\nfunction SUBNETWORK() external view returns (bytes32);\n```",
+      "file": "middleware-sdk/src/interfaces/modules/base/INetworkManager.sol",
+      "highlight": [
+        {
+          "start": 41,
+          "end": 54
+        }
+      ],
+      "title": "",
+      "id": "52364"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nfunction hashTypedDataV4(bytes32 structHash) external view returns (bytes32);\nfunction hashTypedDataV4CrossChain(bytes32 structHash) external view returns (bytes32);\n```",
+      "file": "middleware-sdk/src/interfaces/modules/base/IOzEIP712.sol",
+      "highlight": [
+        {
+          "start": 29,
+          "end": 41
+        }
+      ],
+      "title": "",
+      "id": "52359"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\ninterface IPermissionManager {}\n```",
+      "file": "middleware-sdk/src/interfaces/modules/base/IPermissionManager.sol",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 5
+        }
+      ],
+      "title": "",
+      "id": "52361"
+    },
+    {
+      "type": "textOnly",
+      "description": "This completes the Base Modules overview. You’ve seen directory structure, storage layout, initialization flows, access-control hooks, and **EIP-712** utilities, each tied to a matching `interface`.",
+      "title": "",
+      "id": "52366"
+    }
+  ]
+}

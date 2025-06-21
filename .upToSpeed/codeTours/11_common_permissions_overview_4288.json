@@ -1,0 +1,241 @@
+{
+  "title": "1.1: Common Permissions: Overview",
+  "id": "OVpYt3bzzG9gxxVYN3YpvhSc9VBofVtckWGcKHn/ct0=",
+  "originalId": 4288,
+  "position": 1,
+  "steps": [
+    {
+      "type": "textOnly",
+      "description": "## Overview\n\nWe’ll explore three permission modules—`OzOwnable`, `OzAccessControl`, and `OzAccessManaged`—to see how they initialize and enforce permissions via the `PermissionManager` abstract hook.",
+      "title": "",
+      "id": "50714"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 1: IOzOwnableInitParams\n\nThe `OzOwnableInitParams` struct defines a single `owner` field, the address used to initialize OpenZeppelin’s OwnableUpgradeable logic.\n\nIn `middleware-sdk/src/interfaces/modules/common/permissions/IOzOwnable.sol` (lines 11–13):",
+      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzOwnable.sol",
+      "highlight": [
+        {
+          "start": 11,
+          "end": 13
+        }
+      ],
+      "title": "",
+      "id": "50715"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nstruct OzOwnableInitParams {\n    address owner;\n}\n```",
+      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzOwnable.sol",
+      "highlight": [
+        {
+          "start": 11,
+          "end": 13
+        }
+      ],
+      "title": "",
+      "id": "50716"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 2: OzAccessControlStorage & SetSelectorRole\n\nThe `OzAccessControlStorage` struct contains a mapping from function selectors to required roles, storing the RBAC configuration on-chain. The `SetSelectorRole` event signals when a selector’s required role is updated, enabling off-chain indexing.\n\nIn `middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol` (lines 14–23):",
+      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 14,
+          "end": 23
+        }
+      ],
+      "title": "",
+      "id": "50717"
+    },
+    {
+      "type": "highlight",
+      "description": "```solidity\nstruct OzAccessControlStorage {\n    mapping(bytes4 selector => bytes32 role) _selectorRoles;\n}\n\nevent SetSelectorRole(bytes4 indexed selector, bytes32 indexed role);\n```",
+      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 14,
+          "end": 23
+        }
+      ],
+      "title": "",
+      "id": "50718"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 3: getRole Signature\n\nThe `getRole(bytes4 selector)` function returns the `bytes32` role required to call a specific function selector.\n\nIn `middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol` (lines 30–32):\n\n```solidity\nfunction getRole(bytes4 selector) external view returns (bytes32);\n```",
+      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 30,
+          "end": 32
+        }
+      ],
+      "title": "",
+      "id": "50719"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 4: OzAccessManagedInitParams\n\nThe `OzAccessManagedInitParams` struct wraps a single `authority` address, delegating permission decisions to an external contract.\n\nIn `middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessManaged.sol` (lines 13–15):\n\n```solidity\nstruct OzAccessManagedInitParams {\n    address authority;\n}\n```",
+      "file": "middleware-sdk/src/interfaces/modules/common/permissions/IOzAccessManaged.sol",
+      "highlight": [
+        {
+          "start": 13,
+          "end": 15
+        }
+      ],
+      "title": "",
+      "id": "50720"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 5: OzOwnable Inheritance\n\nThe `OzOwnable` contract inherits `PermissionManager`, `OwnableUpgradeable`, and implements `IOzOwnable`, combining owner-based access with a permission hook.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzOwnable.sol` (line 10):\n\n```solidity\nabstract contract OzOwnable is PermissionManager, OwnableUpgradeable, IOzOwnable {\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzOwnable.sol",
+      "highlight": [
+        {
+          "start": 10,
+          "end": 10
+        }
+      ],
+      "title": "",
+      "id": "50721"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 6: __OzOwnable_init\n\nThe `__OzOwnable_init` initializer calls OpenZeppelin’s `__Ownable_init(owner)`, wiring up the owner address provided in `OzOwnableInitParams`.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzOwnable.sol` (lines 11–15):\n\n```solidity\nfunction __OzOwnable_init(\n    OzOwnableInitParams memory initParams\n) internal virtual onlyInitializing {\n    __Ownable_init(initParams.owner);\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzOwnable.sol",
+      "highlight": [
+        {
+          "start": 11,
+          "end": 15
+        }
+      ],
+      "title": "",
+      "id": "50722"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 7: _checkPermission Override in OzOwnable\n\nThe `_checkPermission` override invokes `_checkOwner()`, enforcing that only the owner can execute protected functions.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzOwnable.sol` (lines 20–22):\n\n```solidity\nfunction _checkPermission() internal view virtual override {\n    _checkOwner();\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzOwnable.sol",
+      "highlight": [
+        {
+          "start": 20,
+          "end": 22
+        }
+      ],
+      "title": "",
+      "id": "50723"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 8: OzAccessControl Inheritance\n\nThe `OzAccessControl` contract inherits `PermissionManager`, `AccessControlUpgradeable`, and implements `IOzAccessControl`, layering dynamic RBAC over the permission hook.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol` (line 10):\n\n```solidity\nabstract contract OzAccessControl is PermissionManager, AccessControlUpgradeable, IOzAccessControl {\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 10,
+          "end": 10
+        }
+      ],
+      "title": "",
+      "id": "50724"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 9: Storage Slot & Helper\n\nA fixed storage slot constant and `_getOzAccessControlStorage` assembly helper enable upgrade-safe access to the selector→role mapping.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol` (lines 11–19):\n\n```solidity\nbytes32 private constant OzAccessControlStorageLocation =\n    0xbe09a78a256419d2b885312b60a13e8082d8ab3c36c463fff4fbb086f1e96f00;\n\nfunction _getOzAccessControlStorage() internal pure returns (OzAccessControlStorage storage $) {\n    assembly {\n        $.slot := OzAccessControlStorageLocation\n    }\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 11,
+          "end": 19
+        }
+      ],
+      "title": "",
+      "id": "50725"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 10: getRole Implementation\n\n`getRole(bytes4)` reads from our storage mapping, returning the required role for the provided function selector.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol` (lines 28–32):\n\n```solidity\nfunction getRole(bytes4 selector) public view virtual returns (bytes32) {\n    return _getOzAccessControlStorage()._selectorRoles[selector];\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 28,
+          "end": 32
+        }
+      ],
+      "title": "",
+      "id": "50726"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 11: _checkPermission Override in OzAccessControl\n\nThe `_checkPermission` override calls `AccessControlUpgradeable._checkRole(getRole(msg.sig))`, ensuring callers possess the specified role for each function signature.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol` (lines 37–39):\n\n```solidity\nfunction _checkPermission() internal view virtual override {\n    _checkRole(getRole(msg.sig));\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 37,
+          "end": 39
+        }
+      ],
+      "title": "",
+      "id": "50727"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 12: _setSelectorRole\n\nInternal `_setSelectorRole` updates the selector→role mapping and emits `SetSelectorRole`, making permission changes transparent.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol` (lines 41–44):\n\n```solidity\nfunction _setSelectorRole(bytes4 selector, bytes32 role) internal virtual {\n    _getOzAccessControlStorage()._selectorRoles[selector] = role;\n    emit SetSelectorRole(selector, role);\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessControl.sol",
+      "highlight": [
+        {
+          "start": 41,
+          "end": 44
+        }
+      ],
+      "title": "",
+      "id": "50728"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 13: OzAccessManaged Inheritance\n\nThe `OzAccessManaged` contract inherits `PermissionManager`, `AccessManagedUpgradeable`, and implements `IOzAccessManaged`, delegating access checks.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessManaged.sol` (line 10):\n\n```solidity\nabstract contract OzAccessManaged is PermissionManager, AccessManagedUpgradeable, IOzAccessManaged {\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessManaged.sol",
+      "highlight": [
+        {
+          "start": 10,
+          "end": 10
+        }
+      ],
+      "title": "",
+      "id": "50729"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 14: __OzAccessManaged_init\n\nThe `__OzAccessManaged_init` initializer forwards `initParams.authority` to OpenZeppelin’s `__AccessManaged_init`, linking to an authority contract.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessManaged.sol` (lines 11–15):\n\n```solidity\nfunction __OzAccessManaged_init(\n    OzAccessManagedInitParams memory initParams\n) internal virtual onlyInitializing {\n    __AccessManaged_init(initParams.authority);\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessManaged.sol",
+      "highlight": [
+        {
+          "start": 11,
+          "end": 15
+        }
+      ],
+      "title": "",
+      "id": "50730"
+    },
+    {
+      "type": "highlight",
+      "description": "### Step 15: _checkPermission Override in OzAccessManaged\n\nThe `_checkPermission` override invokes `_checkCanCall(msg.sender, msg.data)`, delegating runtime permission decisions to the external authority.\n\nIn `middleware-sdk/src/contracts/modules/common/permissions/OzAccessManaged.sol` (lines 20–22):\n\n```solidity\nfunction _checkPermission() internal virtual override {\n    _checkCanCall(msg.sender, msg.data);\n}\n```",
+      "file": "middleware-sdk/src/contracts/modules/common/permissions/OzAccessManaged.sol",
+      "highlight": [
+        {
+          "start": 20,
+          "end": 22
+        }
+      ],
+      "title": "",
+      "id": "50731"
+    },
+    {
+      "type": "textOnly",
+      "description": "## Summary\n\n`OzOwnable` provides single-owner gating, `OzAccessControl` implements per-function RBAC, and `OzAccessManaged` delegates checks to a dedicated authority. Each inserts its logic via the `PermissionManager._checkPermission` hook to enforce access rules consistently across modules.",
+      "title": "",
+      "id": "50732"
+    }
+  ]
+}
