@@ -12,7 +12,7 @@
     },
     {
       "type": "highlight",
-      "description": "```plaintext\nsrc/contracts/modules/base/\n├── NetworkManager.sol    - manages current network and subnetwork IDs via unstructured storage\n├── PermissionManager.sol - defines a reusable permission-checking modifier\n└── OzEIP712.sol          - initializes EIP-712 domain and provides typing utilities\n```",
+      "description": "The `src/contracts/modules/base` directory contains base contract implementations for network management (`NetworkManager.sol`), permission checking (`PermissionManager.sol`), and EIP-712 utilities (`OzEIP712.sol`).",
       "file": "middleware-sdk/src/contracts/modules/base/NetworkManager.sol",
       "highlight": [
         {
@@ -25,7 +25,7 @@
     },
     {
       "type": "highlight",
-      "description": "```plaintext\nsrc/interfaces/modules/base/\n├── INetworkManager.sol   - external API for network context and subnetwork lookup\n├── IPermissionManager.sol- marker interface for permission logic\n└── IOzEIP712.sol         - EIP-712 hashing API and init parameters\n```",
+      "description": "The `src/interfaces/modules/base` directory contains the corresponding interfaces for the base module contracts: `INetworkManager.sol`, `IPermissionManager.sol`, and `IOzEIP712.sol`.",
       "file": "middleware-sdk/src/interfaces/modules/base/INetworkManager.sol",
       "highlight": [
         {
@@ -38,7 +38,7 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nbytes32 private constant NetworkManagerLocation = 0x779150488f5e984d1f840ba606e388ada6c73b44f261274c3595c61a30023e00;\n\nfunction __NetworkManager_init(NetworkManagerInitParams memory initParams) internal virtual onlyInitializing {\n    if (initParams.network == address(0)) revert NetworkManager_InvalidNetwork();\n    INetworkManager.NetworkManagerStorage storage $ = _getNetworkManagerStorage();\n    $. _network      = initParams.network;\n    $. _subnetworkID = initParams.subnetworkID;\n    emit INetworkManager.InitSubnetwork(initParams.network, initParams.subnetworkID);\n}\n```",
+      "description": "This contract uses unstructured storage to manage network context.\n\n`NetworkManagerLocation` defines a fixed storage slot for `NetworkManager`'s data, a pattern to prevent storage collisions in upgradeable contracts.\n\nThe `__NetworkManager_init` function initializes this module by writing the network and subnetwork IDs to this designated storage location.",
       "file": "middleware-sdk/src/contracts/modules/base/NetworkManager.sol",
       "highlight": [
         {
@@ -51,7 +51,7 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nfunction NETWORK() public view virtual returns (address) {\n    return _getNetworkManagerStorage()._network;\n}\n\nfunction SUBNETWORK_IDENTIFIER() public view virtual returns (uint96) {\n    return _getNetworkManagerStorage()._subnetworkID;\n}\n\nfunction SUBNETWORK() public view virtual returns (bytes32) {\n    return NETWORK().subnetwork(SUBNETWORK_IDENTIFIER());\n}\n```",
+      "description": "These public getters retrieve the network context initialized in the previous step.\n\n- `NETWORK()` returns the network's contract address.\n- `SUBNETWORK_IDENTIFIER()` returns the subnetwork's ID.\n- `SUBNETWORK()` computes a unique `bytes32` identifier from the network address and subnetwork ID.\n\nThese functions are critical for any module logic that needs to be aware of its on-chain environment.",
       "file": "middleware-sdk/src/contracts/modules/base/NetworkManager.sol",
       "highlight": [
         {
@@ -64,7 +64,7 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nmodifier checkPermission() {\n    _checkPermission();\n    _;\n}\n\nfunction _checkPermission() internal virtual;\n```",
+      "description": "This abstract contract provides a standard hook for permissioning. The `checkPermission` modifier delegates its logic to the `_checkPermission` function.\n\nBy marking `_checkPermission` as `internal virtual`, inheriting contracts are forced to provide the specific access control logic. This establishes a reusable and extensible permissioning pattern for modules.",
       "file": "middleware-sdk/src/contracts/modules/base/PermissionManager.sol",
       "highlight": [
         {
@@ -77,7 +77,7 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nfunction __OzEIP712_init(OzEIP712InitParams memory initParams) internal virtual onlyInitializing {\n    __EIP712_init(initParams.name, initParams.version);\n    emit InitEIP712(initParams.name, initParams.version);\n}\n```",
+      "description": "The `__OzEIP712_init` function initializes the EIP-712 domain separator by calling OpenZeppelin's `__EIP712_init` with a given name and version. This establishes the unique domain for signed typed data, which is fundamental for secure signature verification within modules that use this base contract.",
       "file": "middleware-sdk/src/contracts/modules/base/OzEIP712.sol",
       "highlight": [
         {
@@ -90,7 +90,7 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nfunction hashTypedDataV4(bytes32 structHash) public view returns (bytes32) {\n    return _hashTypedDataV4(structHash);\n}\n\nfunction hashTypedDataV4CrossChain(bytes32 structHash) public view virtual returns (bytes32) {\n    return MessageHashUtils.toTypedDataHash(\n        keccak256(abi.encode(CROSS_CHAIN_TYPE_HASH, _EIP712NameHash(), _EIP712VersionHash())),\n        structHash\n    );\n}\n```",
+      "description": "This contract provides two EIP-712 hashing utilities.\n\n`hashTypedDataV4` is the standard implementation from OpenZeppelin, producing a hash tied to the current chain and contract.\n\n`hashTypedDataV4CrossChain` produces a chain-agnostic hash by using a domain separator that omits `chainId` and `verifyingContract`. This allows for verifying signatures across different chains.",
       "file": "middleware-sdk/src/contracts/modules/base/OzEIP712.sol",
       "highlight": [
         {
@@ -103,7 +103,7 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nfunction NETWORK() external view returns (address);\nfunction SUBNETWORK_IDENTIFIER() external view returns (uint96);\nfunction SUBNETWORK() external view returns (bytes32);\n```",
+      "description": "The `INetworkManager` interface defines the external API for network context. These getters are used by modules to operate within the correct on-chain environment.\n\n- `NETWORK()` returns the network address.\n- `SUBNETWORK_IDENTIFIER()` returns the subnetwork's ID.\n- `SUBNETWORK()` returns a composite `bytes32` identifier for the network/subnetwork pair, used for unique identification.",
       "file": "middleware-sdk/src/interfaces/modules/base/INetworkManager.sol",
       "highlight": [
         {
@@ -116,7 +116,7 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\nfunction hashTypedDataV4(bytes32 structHash) external view returns (bytes32);\nfunction hashTypedDataV4CrossChain(bytes32 structHash) external view returns (bytes32);\n```",
+      "description": "This interface exposes two EIP-712 hashing utilities:\n\n- `hashTypedDataV4`: Standard EIP-712 hashing, creating a hash specific to the current chain and contract.\n- `hashTypedDataV4CrossChain`: A variant for cross-chain operations. By omitting `chainId` and `verifyingContract` from the domain separator, it produces signatures that are verifiable across different chains.",
       "file": "middleware-sdk/src/interfaces/modules/base/IOzEIP712.sol",
       "highlight": [
         {
@@ -129,12 +129,12 @@
     },
     {
       "type": "highlight",
-      "description": "```solidity\ninterface IPermissionManager {}\n```",
+      "description": "This is a marker interface. Since the core logic in `PermissionManager` is `internal`, this interface is empty. It's used for type-checking within the module registry to identify contracts that implement permissioning.",
       "file": "middleware-sdk/src/interfaces/modules/base/IPermissionManager.sol",
       "highlight": [
         {
-          "start": 1,
-          "end": 5
+          "start": 4,
+          "end": 4
         }
       ],
       "title": "",
